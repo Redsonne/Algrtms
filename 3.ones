@@ -1,0 +1,55 @@
+import java.util.Scanner;
+
+
+public class Main {
+    public static int del = 1000000007;
+
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(System.in)) {
+            int n = sc.nextInt();
+            int k = sc.nextInt();
+            long res;
+            if (n == k || k == 0) {
+                System.out.println(1);
+            } else {
+
+                if(k> (n-k)){  res = F(n,n-k);}
+                else{ res = F(n, k);}
+                System.out.println(res);
+            }
+        }
+    }
+
+    public static long F(int n, int k) {
+long res=1;
+long res1=1;
+int j=1;
+int k1=k+1;
+while (k1<=n){
+    res=(res%del)*(k1%del)%del;
+    ++k1;
+}
+while (res1<=(n-k)){
+    res=((res%del)*Pow(res1,del-2)%del)%del;
+    ++res1;
+        }
+return res;
+
+    }
+
+
+
+
+    public static long Pow(long a, int n) {
+        long result = 1;
+        long base = a % del;
+        while (n > 0) {
+            if ((n & 1) == 1) {
+                result = (result * base) % del;
+            }
+            base = (base * base) % del;
+            n >>= 1;
+        }
+        return result;
+    }
+}
