@@ -1,0 +1,68 @@
+import java.io.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try (BufferedReader br = new BufferedReader(new FileReader("input.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            String data = br.readLine();
+
+            int n = data.length();
+            int[][] dp = new int[n][n];
+
+
+            for (int i = 0; i < n; i++) {
+                dp[i][i] = 1;
+            }
+            for (int i = 0; i < n - 1; i++) {
+                dp[i][i + 1] = (data.charAt(i) == data.charAt(i + 1)) ? 2 : 1;
+            }
+
+
+            for (int l = 3; l <= n; l++) {
+                for (int i = 0; i <= n - l; i++) {
+                    int j = i + l - 1;
+                    dp[i][j] = (data.charAt(i) == data.charAt(j)) ? dp[i + 1][j - 1] + 2 : Math.max(dp[i + 1][j], dp[i][j - 1]);
+                }
+            }
+
+            int res = dp[0][n - 1];
+
+            StringBuilder sres = new StringBuilder();
+            int i = 0, j = n - 1;
+
+
+            while (i <= j) {
+                if (i == j) {
+                    sres.append(data.charAt(i));
+                    break;
+                } else if (dp[i][j] == dp[i][j - 1]) {
+                    j--;
+                } else if (dp[i][j] == dp[i + 1][j]) {
+                    i++;
+                } else {
+                    sres.append(data.charAt(i));
+                    i++;
+                    j--;
+                }
+            }
+
+
+            StringBuilder reversed = new StringBuilder(sres);
+            if (res % 2 == 0) {
+                sres.append(reversed.reverse());
+            } else {
+                reversed.deleteCharAt(reversed.length() - 1);
+                sres.append(reversed.reverse());
+            }
+
+            writer.write(String.valueOf(res));
+            writer.newLine();
+            writer.write(sres.toString());
+        } catch (IOException e) {
+            e.getMessage();
+        }
+
+
+    }
+}
