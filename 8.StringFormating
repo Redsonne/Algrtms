@@ -1,0 +1,40 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(new File("in.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("out.txt"))) {
+
+            int d = sc.nextInt();
+            int insrt = sc.nextInt();
+            int r= sc.nextInt();
+            sc.nextLine();
+            String str1= sc.next();
+            String str2= sc.next();
+            int n=str1.length();
+            int m=str2.length();
+            int[][] dp= new int[n+1][m+1];
+            for (int i = 0; i <= n; i++) {
+                dp[i][0] = i*d;
+            }
+            for (int j = 0; j <= m; j++) {
+                dp[0][j] = j*insrt;
+            }
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j <= m; j++) {
+                    dp[i][j]=Math.min( dp[i-1][j]+d,Math.min(dp[i][j-1]+insrt,dp[i-1][j-1]+b(str1.charAt(i-1),str2.charAt(j-1))*r));
+                }
+            }
+            writer.write(String.valueOf(dp[n][m]));
+
+        }catch (IOException e) {
+            e.getMessage();
+        }
+    }
+
+    public static int b(char a,char b){
+        return a==b?0:1;
+    }
+   }
