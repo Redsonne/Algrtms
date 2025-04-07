@@ -1,0 +1,117 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static long[][] dp;
+    static int[][] coins;
+
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(new File("input.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            int n = sc.nextInt();
+            coins = new int[n][2];
+            for (int i = 0; i < n; i++) {
+                coins[i][0] = sc.nextInt();
+                coins[i][1] = sc.nextInt();
+            }
+
+if((n>=9000)&&(isMonotone(coins))){
+      int res= coins[n-1][0]-coins[0][0];
+      writer.write(String.valueOf(res)); 
+}else {
+    List<int[]> filteredCoins = removeForgettableCoins(coins);
+    int reducedN = filteredCoins.size();
+    dp = new long[reducedN][reducedN];
+
+    for (int i = 0; i < reducedN; i++) {
+        Arrays.fill(dp[i], Long.MAX_VALUE);
+    }
+
+    for (int i = 0; i < reducedN; i++) {
+        dp[i][i] = 0;
+    }
+
+
+    for (int len = 2; len <= reducedN; len++) {
+        for (int i = 0; i <= reducedN - len; i++) {
+            int j = i + len - 1;
+
+
+            if (dp[i][j - 1] != Long.MAX_VALUE) {
+                long time = dp[i][j - 1] + filteredCoins.get(j)[0] - filteredCoins.get(j - 1)[0];
+                if (time <= filteredCoins.get(j)[1]) {
+                    dp[i][j] = Math.min(dp[i][j], time);
+                }
+            }
+
+            if (dp[j - 1][i] != Long.MAX_VALUE) {
+                long time = dp[j - 1][i] + filteredCoins.get(j)[0] - filteredCoins.get(i)[0];
+                if (time <= filteredCoins.get(j)[1]) {
+                    dp[i][j] = Math.min(dp[i][j], time);
+                }
+            }
+
+            if (dp[i + 1][j] != Long.MAX_VALUE) {
+                long time = dp[i + 1][j] + filteredCoins.get(j)[0] - filteredCoins.get(i)[0];
+                if (time <= filteredCoins.get(i)[1]) {
+                    dp[j][i] = Math.min(dp[j][i], time);
+                }
+            }
+
+            if (dp[j][i + 1] != Long.MAX_VALUE) {
+                long time = dp[j][i + 1] + filteredCoins.get(i + 1)[0] - filteredCoins.get(i)[0];
+                if (time <= filteredCoins.get(i)[1]) {
+                    dp[j][i] = Math.min(dp[j][i], time);
+                }
+            }
+        }
+    }
+
+    long result = dp[0][reducedN - 1];
+    if (result >= dp[reducedN - 1][0]) {
+        result = dp[reducedN - 1][0];
+    }
+
+    if (result != Long.MAX_VALUE) {
+        writer.write(String.valueOf(result));
+    } else {
+        writer.write("No solution");
+    }
+} } catch (IOException e) {
+            e.getMessage();
+        }
+    }
+
+
+    private static List<int[]> removeForgettableCoins(int[][] coins) {
+        List<int[]> result = new ArrayList<>();
+
+        for (int i = 0; i < coins.length; i++) {
+            while (result.size() >= 2 &&
+                    isForgettable(result.get(result.size() - 2), result.get(result.size() - 1), coins[i])) {
+                result.remove(result.size() - 1);
+            }
+            result.add(coins[i]);
+        }
+
+        return result;
+    }
+
+    private static boolean isForgettable(int[] c1, int[] c2, int[] c3) {
+        return (c1[0] <= c2[0] && c2[0] <= c3[0]) && (c1[1] <= c2[1] && c2[1] >= c3[1]);
+    }
+    public static boolean isMonotone(int[][] ar){
+        Boolean res=true;
+        long time=0;
+        for (int i=1;i< ar.length;i++){
+            if (ar[i - 1][1] > ar[i][1]) {
+                return false; 
+            }
+            time+=ar[i][0]-ar[i-1][0];
+            if (ar[i][1]<time){
+                return false;
+            }
+        }
+        return res;
+    }
+}
