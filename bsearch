@@ -1,0 +1,80 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(System.in)) {
+            int n = sc.nextInt();
+            int[] ar = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                ar[i] = sc.nextInt();
+            }
+            int numOfReq = sc.nextInt();
+            int[] req = new int[numOfReq];
+            for (int i = 0; i < numOfReq; i++) {
+                req[i] = sc.nextInt();
+            }
+            for (int i = 0; i < numOfReq; i++) {
+                int b, l, r;
+                int res = binarySearchGreat(ar, req[i]);
+                if (res == -1) {
+                    b = 0;
+                    int a=findFirstGreater(ar, req[i]);
+                    l = (a!=-1)?a:n;
+                    r = l;
+
+                } else {
+                    b = 1;
+                    l = res;
+                    r = (res + 1 == n) ? n : findFirstGreater(ar, req[i]);
+                    if(r==-1){r=n;}
+                }
+
+                System.out.println(b + " " + l + " " + r);
+
+            }
+        }
+    }
+
+    public static int binarySearchGreat(int[] ar, int x) {
+        int left = 0;
+        int right = ar.length - 1;
+        int result = -1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (ar[mid] == x) {
+                result = mid;
+                right = mid - 1;
+            } else if (ar[mid] < x) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        return result;
+
+
+    }
+
+    public static int findFirstGreater(int[] ar, int x) {
+        int left = 0;
+        int right = ar.length - 1;
+        int result = -1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (ar[mid] > x) {
+                result = mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return result;
+    }
+}
