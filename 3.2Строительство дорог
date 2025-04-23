@@ -1,0 +1,56 @@
+import java.io.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            String[] firstLine = reader.readLine().split(" ");
+            int n = Integer.parseInt(firstLine[0]);
+            int m = Integer.parseInt(firstLine[1]);
+
+            int[] parent = new int[n + 1];
+            int[] size = new int[n + 1];
+
+            for (int i = 1; i <= n; i++) {
+                parent[i] = i;
+                size[i] = 1;
+            }
+
+            int components = n;
+
+            for (int i = 0; i < m; i++) {
+                String[] line = reader.readLine().split(" ");
+                int x = Integer.parseInt(line[0]);
+                int y = Integer.parseInt(line[1]);
+
+                int rootX = find(parent, x);
+                int rootY = find(parent, y);
+
+                if (rootX != rootY) {
+
+                    if (size[rootX] >= size[rootY]) {
+                        parent[rootY] = rootX;
+                        size[rootX] += size[rootY];
+                    } else {
+                        parent[rootX] = rootY;
+                        size[rootY] += size[rootX];
+                    }
+                    components--;
+                }
+
+                writer.write(String.valueOf(components));
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+           
+    }
+
+    private static int find(int[] parent, int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent, parent[x]);
+        }
+        return parent[x];
+    }
+}
