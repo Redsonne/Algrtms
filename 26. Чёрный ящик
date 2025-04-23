@@ -1,0 +1,76 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <queue>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+void adjustHeaps(priority_queue<long>& lower, priority_queue<long, vector<long>, greater<long>>& upper, int desiredSize) {
+    while (lower.size() < desiredSize && !upper.empty()) {
+        lower.push(upper.top());
+        upper.pop();
+    }
+    while (lower.size() > desiredSize) {
+        upper.push(lower.top());
+        lower.pop();
+    }
+}
+
+int main() {
+    // Оптимизация потоков ввода/вывода
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    ifstream inputFile("input.txt");
+    ofstream outputFile("output.txt");
+
+    int totalElements, queryCount;
+    inputFile >> totalElements >> queryCount;
+
+    vector<long> elements(totalElements);
+    for (int i = 0; i < totalElements; i++) {
+        inputFile >> elements[i];
+    }
+
+    vector<int> queries(queryCount);
+    for (int i = 0; i < queryCount; i++) {
+        inputFile >> queries[i];
+    }
+
+    priority_queue<long> lowerHalf; // Максимальная куча
+    priority_queue<long, vector<long>, greater<long>> upperHalf; // Минимальная куча
+
+    ostringstream resultBuilder;
+    int currentQueryIndex = 0;
+
+    for (int i = 0; i < totalElements; i++) {
+        if (lowerHalf.empty() || elements[i] <= lowerHalf.top()) {
+            lowerHalf.push(elements[i]);
+        }
+        else {
+            upperHalf.push(elements[i]);
+        }
+
+        while (currentQueryIndex < queryCount && queries[currentQueryIndex] == i + 1) {
+            adjustHeaps(lowerHalf, upperHalf, currentQueryIndex + 1);
+            resultBuilder << lowerHalf.top() << ' ';
+            currentQueryIndex++;
+        }
+    }
+
+   
+
+    string result = resultBuilder.str();
+    if (!result.empty()) {
+        result.pop_back(); // Удаляем последний пробел
+    }
+    outputFile << result;
+
+    inputFile.close();
+    outputFile.close();
+
+   
+    return 0;
+}
