@@ -29,7 +29,14 @@
 ![image](https://github.com/user-attachments/assets/c38a83f3-e890-4064-a79e-9b9173652eff)
 
 
+2.1. Построить дерево
+![image](https://github.com/user-attachments/assets/7589587b-3e3f-4894-8a38-f4e70470e505)
 
+2.2. Удалить из дерева
+![image](https://github.com/user-attachments/assets/75a9341d-40b6-44cb-85f3-beeaaa7c21af)
+
+2.3 IsBST? 
+![image](https://github.com/user-attachments/assets/320236e5-de3e-4fc0-8b86-da90107fe547)
 
 
 
