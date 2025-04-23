@@ -1,0 +1,176 @@
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+    public static int result_flow;
+    public static int n;
+    public static boolean[] visited;
+    public static ArrayList<Node>[] g;
+    public static ArrayList<Integer>[] network;
+    public static ArrayList<Edge> edgeslist;
+    public static int[] pred;
+
+    public static long edmondsKarp(int s, int t) {
+
+        result_flow = 0;
+
+        while (true) {
+            for (int v = 0; v < n; v++) {
+                visited[v] = false;
+                pred[v] = -1;
+            }
+
+            find_path(s);
+            if (!visited[t]) {
+                break;
+            }
+
+            ArrayList<Integer> path = restore_path(t);
+            int flow = path_capacity(path);
+            push_path(path, flow);
+            result_flow += flow;
+        }
+
+        return result_flow;
+    }
+
+    public static void push_path(ArrayList<Integer> path, int flow) {
+        for (int e : path) {
+            push(e, flow);
+        }
+    }
+
+    public static void push(int e, int flow) {
+        Edge edge = edgeslist.get(e);
+        edge.flow += flow;
+        edge = edgeslist.get(e ^ 1);
+        edge.flow -= flow;
+    }
+
+    public static int path_capacity(ArrayList<Integer> path) {
+        int cap = available(path.get(0));
+        for (int e : path) {
+            cap = Math.min(cap, available(e));
+        }
+        return cap;
+    }
+
+    public static long max_flow(int s, int t) {
+        if (s == t) {
+            return 0;
+        }
+        build_network();
+        return edmondsKarp(s, t);
+
+    }
+
+    public static void find_path(int v) {
+        Queue<Integer> q = new ArrayDeque<>();
+
+
+        visited[v] = true;
+        q.add(v);
+        int u;
+        while (!q.isEmpty()) {
+            v = q.poll();
+
+            for (int e : edges(v)) {
+                u = edgeslist.get(e).target;
+                if (!visited[u] && available(e) > 0) {
+                    visited[u] = true;
+                    pred[u] = e;
+                    q.add(u);
+                }
+            }
+        }
+    }
+
+    public static ArrayList<Integer> restore_path(int v) {
+        ArrayList<Integer> path = new ArrayList<>();
+        int e;
+        while (pred[v] != -1) {
+            e = pred[v];
+            path.add(e);
+            v = edgeslist.get(e).source;
+        }
+        return path;
+    }
+
+    public static void build_network() {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < g[i].size(); j++) {
+                network[i].add(edgeslist.size());
+                edgeslist.add(new Edge(i, g[i].get(j).to, g[i].get(j).cost));
+                network[g[i].get(j).to].add(edgeslist.size());
+                edgeslist.add(new Edge(g[i].get(j).to, i, 0));
+            }
+        }
+    }
+
+    public static ArrayList<Integer> edges(int v) {
+        return network[v];
+    }
+
+    public static int available(int e) {
+
+        return edgeslist.get(e).capacity - edgeslist.get(e).flow;
+    }
+
+
+    public static void main(String[] args) {
+        try (
+                Scanner scanner = new Scanner(System.in);) {
+            n = scanner.nextInt();
+            int m = scanner.nextInt();
+            visited = new boolean[n];
+            g = new ArrayList[n];
+            network = new ArrayList[n];
+            for (int i = 0; i < n; i++) {
+                g[i] = new ArrayList<>();
+                network[i] = new ArrayList<>();
+            }
+            int x;
+            int y;
+            int z;
+            for (int i = 0; i < m; i++) {
+                x = scanner.nextInt()-1;
+                y = scanner.nextInt()-1;
+                z = scanner.nextInt();
+                g[x ].add(new Node(y, z));
+            }
+            edgeslist = new ArrayList<>();
+            pred = new int[n];
+
+
+            System.out.println(max_flow(0, n-1));
+        }
+    }
+
+    static class Edge {
+        int source;
+        int target;
+        int capacity;
+        int flow;
+
+        Edge(int source, int target, int capacity) {
+            this.source = source;
+            this.target = target;
+            this.capacity = capacity;
+            this.flow = 0;
+
+        }
+
+    }
+
+    static class Node {
+        int to;
+        int cost;
+
+        Node(int to, int cost) {
+            this.to = to;
+            this.cost = cost;
+        }
+    }
+}
