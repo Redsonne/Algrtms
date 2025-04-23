@@ -1,0 +1,134 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    private static boolean isLatinLetter(char ch) {
+        return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+    }
+
+    private static int getAlphabetIndex(char ch) {
+        if (ch >= 'a' && ch <= 'z') {
+            return ch - 'a' + 1;
+        } else {
+            return ch - 'A' + 1;
+        }
+    }
+    private static String createStringFromIndices(int[] indices) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int index : indices) {
+
+            if (index >= 1 && index <= 26) {
+                sb.append((char) ('a' + index - 1));
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public static String findMinimalWord(String s) {
+        int n = s.length();
+        int[] lps = PrefixFunction(s);
+        int candidate_len = n - lps[n - 1];
+        String candidate = s.substring(0, candidate_len);
+        for (int i = 0; i < n; i += candidate_len) {
+            int end = Math.min(i + candidate_len, n);
+            String current = s.substring(i, end);
+            if (!candidate.startsWith(current)) {
+                return s;
+            }
+        }
+
+        return candidate;
+    }
+    public static int[] PrefixFunction(String s) {
+        int n = s.length();
+        int[] pi = new int[n];
+        for (int i = 1; i < n; i++) {
+            int j = pi[i - 1];
+            while (j > 0 && s.charAt(i) != s.charAt(j)) {j = pi[j - 1];}
+            if (s.charAt(i) == s.charAt(j)){j++;}
+            pi[i] = j;
+        }
+
+        return pi;}
+
+
+
+
+
+    public static String lexicographicallyMinimalRotation(String s) {
+        int n = s.length();
+        String S = s + s;
+        int[] f = new int[2 * n];
+        Arrays.fill(f, -1);
+        int k = 0;
+
+        for (int j = 1; j < 2 * n; j++) {
+            int i = f[j - k - 1];
+            while (i != -1 && S.charAt(j) != S.charAt(k + i + 1)) {
+                if (S.charAt(j) < S.charAt(k + i + 1)) {
+                    k = j - i - 1;
+                }
+                i = f[i];
+            }
+            if (i == -1 && S.charAt(j) != S.charAt(k)) {
+                if (S.charAt(j) < S.charAt(k)) {
+                    k = j;
+                }
+                f[j - k] = -1;
+            } else {
+                f[j - k] = i + 1;
+            }
+        }
+        return S.substring(k, k + n);
+    }
+    public static void main(String[] args) {
+        try (BufferedReader br = new BufferedReader(new FileReader("littera.in"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("littera.out"))) {
+            int n = Integer.parseInt(br.readLine());
+            String line;
+            List<Character> a =new ArrayList<>();
+            List<Character> b =new ArrayList<>();
+            while ((line = br.readLine()) != null) {
+                for (char ch : line.toCharArray()) {
+                    if(a.size()<n){
+                        a.add(ch);
+                    }
+                    else{
+                        b.add(ch);
+                    }
+                }
+            }
+
+            List<Character> cleanedA=  a.stream()
+                    .filter(ch -> Character.isLetter(ch) && isLatinLetter(ch))
+                    .collect(Collectors.toList());
+            List<Character> cleanedB=  b.stream()
+                    .filter(ch -> Character.isLetter(ch) && isLatinLetter(ch))
+                    .collect(Collectors.toList());
+
+
+            int[] differences=new int[cleanedA.size()];
+            for (int i = 0; i < cleanedA.size(); i++) {
+                differences[i] = getAlphabetIndex(cleanedB.get(i)) - getAlphabetIndex(cleanedA.get(i));
+                if( differences[i]<=0){
+                    differences[i]+=26;
+                }
+            }
+            String resultString = createStringFromIndices(differences);
+            String res= findMinimalWord(resultString);
+
+
+            writer.write(lexicographicallyMinimalRotation(res));
+        } catch (IOException e) {
+            e.getMessage();
+        }
+
+
+    }
+}
