@@ -1,0 +1,36 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    ifstream fin("huffman.in");
+    ofstream fout("huffman.out");
+
+    int n;
+    fin >> n;
+    vector<long long> a(n), b(n);
+    long long res = 0;
+
+    for (int i = 0; i < n; i++) {
+        fin >> a[i];
+    }
+
+    int i = 0, j = 0;
+    long long c, d;
+
+    for (int k = 0; k < n - 1; k++) {
+        c = (i < n && (j >= k || a[i] < b[j])) ? a[i++] : b[j++];
+        d = (i < n && (j >= k || a[i] < b[j])) ? a[i++] : b[j++];
+        b[k] = c + d;
+        res += b[k];
+    }
+
+    fout << res << '\n';
+    return 0;
+}
