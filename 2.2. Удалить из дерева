@@ -1,0 +1,145 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Main implements Runnable {
+    public static void main(String[] args) {
+        new Thread(null, new Main(), "", 64 * 1024 * 1024).start();
+    }
+
+    public void run() {
+        try (FileWriter fileWriter = new FileWriter("output.txt");
+             Scanner scanner = new Scanner(new File("input.txt"))) {
+          Tree  tree = new Tree();
+
+          long delval= scanner.nextLong();
+          scanner.nextLine();
+            while (scanner.hasNext()) {
+                tree.add(scanner.nextLong());
+            }
+            tree.delete(delval);
+            tree.pointLeftRight(fileWriter);
+
+
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+
+
+
+
+ class Tree {
+    class Node {
+        long value;
+        Node left, right;
+
+        Node( long value) {
+            this.value = value;
+            left = null;
+            right = null;
+        }
+
+    }
+
+    Node root;
+
+    Tree() {
+        root = null;
+    }
+
+     private Node findVal(long val) {
+         Node nd = root;
+         while (nd != null) {
+             int tmp = Long.compare(val, nd.value);
+
+             if (tmp == 0) {
+                 return nd;
+             } else if (tmp < 0) {
+                 nd = nd.left;
+             } else {
+                 nd = nd.right;
+             }
+         }
+         return null;
+     }
+
+     public boolean find(long val) {
+         Node node = findVal(val);
+         boolean isNodePresent = (node != null);
+         return isNodePresent;
+     }
+     public void delete(long val) throws IllegalArgumentException {
+
+         if (find(val) ) {
+             root = delete(root, val);
+         }
+     }
+
+     private Node delete(Node node, long val) {
+         if (node == null) {
+             return null;
+         }
+         int tmp =  Long.compare(val, node.value);
+         if (tmp < 0) {
+             node.left = delete(node.left, val);
+         } else if (tmp > 0) {
+             node.right = delete(node.right, val);
+         } else {
+             if (node.left == null) {
+                 return node.right;
+             } else if (node.right == null) {
+                 return node.left;
+             } else {
+
+                 Node oneRAlwaysL = node.right;
+                 while (oneRAlwaysL.left != null) {
+                     oneRAlwaysL = oneRAlwaysL.left;
+                 }
+                 long next = oneRAlwaysL.value;
+                 delete(root, oneRAlwaysL.value);
+                 node.value = next;
+                 return node;
+             }
+         }
+         return node;
+     }
+
+
+     void pointLeftRight(FileWriter fileWriter) throws IOException {
+         pointLeftRight(root, fileWriter);
+     }
+
+     void pointLeftRight(Node node, FileWriter fileWriter) throws IOException {
+         if (node != null) {
+             fileWriter.write(node.value + "\n");
+             pointLeftRight(node.left, fileWriter);
+             pointLeftRight(node.right, fileWriter);
+         }
+     }
+
+    public void add( long val)  {
+
+        root = add(root, val);
+    }
+
+    private Node add(Node node,  long val) {
+        if (node == null) {
+            return new Node(val);
+        } else {
+            int tmp = Long.compare(val, node.value);
+            if (tmp < 0) {
+                node.left = add(node.left, val);
+            } else if (tmp > 0) {
+                node.right = add(node.right, val);
+            }
+            return node;
+        }
+    }
+
+
+}
