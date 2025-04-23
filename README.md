@@ -39,6 +39,26 @@
 ![image](https://github.com/user-attachments/assets/320236e5-de3e-4fc0-8b86-da90107fe547)
 
 
+3.1 Кодирование Хаффмана 
+![image](https://github.com/user-attachments/assets/e9a250eb-e1d6-4bce-bad0-2d4d6984fab9)
+
+3.2 Строительство дорог
+![image](https://github.com/user-attachments/assets/e71db5b9-c334-4857-acc5-35dffb1f1e4a)
+
+3.3 Разрушение дорог 
+![image](https://github.com/user-attachments/assets/8aef0dbb-f46b-45da-865f-ffe572005f30)
+
+3.4  Задача о сумме
+![image](https://github.com/user-attachments/assets/638818fa-4457-42f0-8b1a-4e226affaf8d)
+
+3.5 HashTable
+![image](https://github.com/user-attachments/assets/26b54b14-85ed-4b19-b7eb-b2ca65636487)
+
+3.6 Черный ящик
+![image](https://github.com/user-attachments/assets/4bea891d-e97c-434a-8256-1b0cc457a2f8)
+
+
+
 
 
 
