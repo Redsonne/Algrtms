@@ -1,0 +1,76 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try (Scanner scanner = new Scanner(new File("input.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            int n = scanner.nextInt();
+            int[][] matrix = new int[n][n];
+
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    matrix[i][j] = scanner.nextInt();
+                }
+            }
+            int start=0;
+
+            boolean toStop=false;
+            int[] res=new int[n];
+            visited=new boolean[n];
+
+
+            res=bfs(start,n,matrix,res);
+            for(int i=0;i<n;i++){
+                if(res[i]==0){
+                    res=bfs(i,n,matrix,res);
+                }
+            }
+
+            StringBuilder sb=new StringBuilder();
+            for(int i=0;i<n;i++){
+
+                sb.append(res[i]+" ");
+            }
+            sb.deleteCharAt(sb.length()-1);
+            writer.write(sb.toString());
+
+
+        } catch (IOException e) {
+            e.getMessage();
+        }
+
+
+    }
+    public static int indx=1;
+    public static boolean[] visited;
+    public static int[] bfs(int start,int n,int[][] matrix,int[] res){
+        Queue<Integer> q = new ArrayDeque<>();
+   
+
+        res[start]=indx;
+        ++indx;
+
+        visited[start]=true;
+        q.add(start);
+        int curr;
+        while (!q.isEmpty()){
+            curr=q.poll();
+            for(int i=0;i<n;i++){
+
+                if(matrix[curr][i]==1&&!visited[i]){
+                    visited[i]=true;
+                    res[i]=indx;
+                    ++indx;
+                    q.add(i);
+
+                }
+            }
+
+
+        }
+        return res;
+    }
+
+}
