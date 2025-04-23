@@ -58,6 +58,36 @@
 ![image](https://github.com/user-attachments/assets/4bea891d-e97c-434a-8256-1b0cc457a2f8)
 
 
+4.1 Построить матрицу смежности
+![image](https://github.com/user-attachments/assets/63cb103e-4c7b-47ee-88ea-7fa1d54c404c)
+
+4.2  Канонический вид (по списку дуг)
+
+![image](https://github.com/user-attachments/assets/68f16b06-38ba-475d-9aec-e914372cbc89)
+
+4.3  Построить список смежности
+
+![image](https://github.com/user-attachments/assets/e83eae00-cfe4-4d07-bf53-4b84bd3aef89)
+
+4.4 Поиск в ширину
+![image](https://github.com/user-attachments/assets/e3d17422-4e20-4dfe-9ede-7506fdf4888c)
+
+4.5 Поиск в глубину
+![image](https://github.com/user-attachments/assets/b91521dc-4c16-43ed-834b-869fd1038919)
+
+4.6 Дейкстра
+![image](https://github.com/user-attachments/assets/c441c627-022a-48d3-ab07-c6df7592b1c0)
+
+
+4.7 Максимальный поток 
+
+![image](https://github.com/user-attachments/assets/9c87b5d3-8bd5-413b-b5f9-6e2384076eec)
+
+4.8 Чётно-нечётная магистраль
+![image](https://github.com/user-attachments/assets/782dc91c-4eca-48b9-ad62-546f4e440519)
+
+
+
 
 
 
