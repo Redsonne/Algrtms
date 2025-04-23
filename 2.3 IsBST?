@@ -1,0 +1,44 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static void main(String[] args) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("bst.in"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("bst.out"))) {
+
+            int n = Integer.parseInt(reader.readLine());
+            long root = Long.parseLong(reader.readLine());
+            long[] values = new long[n];
+            long[] min = new long[n];
+            long[] max = new long[n];
+            values[0] = root;
+            min[0] = Long.MIN_VALUE;
+            max[0] = Long.MAX_VALUE;
+
+            for (int i = 1; i < n; i++) {
+                StringTokenizer st = new StringTokenizer(reader.readLine());
+                values[i] = Long.parseLong(st.nextToken());
+                int parentIndex = Integer.parseInt(st.nextToken()) - 1;
+                String direction = st.nextToken().trim();
+
+                if (direction.equals("L")) {
+                    min[i] = min[parentIndex];
+                    max[i] = values[parentIndex];
+                } else {
+                    min[i] = values[parentIndex];
+                    max[i] = max[parentIndex];
+                }
+
+                if (values[i] < min[i] || values[i] >= max[i]) {
+                    writer.write("NO");
+                    return;
+                }
+            }
+
+            writer.write("YES");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
