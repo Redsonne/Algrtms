@@ -1,0 +1,109 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            String[] firstLine = reader.readLine().split(" ");
+            int n = Integer.parseInt(firstLine[0]);
+            int m = Integer.parseInt(firstLine[1]);
+            int q = Integer.parseInt(firstLine[2]);
+
+            int[][] edges = new int[m][2];
+            StringTokenizer  st;
+            for (int i = 0; i < m; i++) {
+              st = new StringTokenizer(reader.readLine());
+                edges[i][0] = Integer.parseInt(st.nextToken());
+                edges[i][1] = Integer.parseInt(st.nextToken());
+            }
+
+            int[] parent = new int[n + 1];
+            int[] size = new int[n + 1];
+            int[] qorder = new int[q];
+            boolean[] removed = new boolean[m];
+            for (int i = 0; i < q; i++) {
+                qorder[i]=Integer.parseInt(reader.readLine())-1;
+                removed[qorder[i]] = true;
+            }
+
+            for (int i = 1; i <= n; i++) {
+                parent[i] = i;
+                size[i] = 1;
+            }
+
+            int components = n;
+            int r;
+            int x;
+            int y;
+            StringBuilder stb=new StringBuilder();
+
+
+
+
+            for (int i = 0; i < m; i++) {
+                if (!removed[i]) {
+
+                x = edges[i][0];
+                y = edges[i][1];
+
+                int rootX = find(parent, x);
+                int rootY = find(parent, y);
+
+                if (rootX != rootY) {
+
+                    if (size[rootX] >= size[rootY]) {
+                        parent[rootY] = rootX;
+                        size[rootX] += size[rootY];
+                    } else {
+                        parent[rootX] = rootY;
+                        size[rootY] += size[rootX];
+                    }
+                    components--;
+                }      }
+            }
+            if (components!=1){
+            for (int i = 0; i < q; i++) {
+                r=qorder[q-1-i];
+
+                x = edges[r][0];
+                y = edges[r][1];
+
+                int rootX = find(parent, x);
+                int rootY = find(parent, y);
+
+                if (rootX != rootY) {
+
+                    if (size[rootX] >= size[rootY]) {
+                        parent[rootY] = rootX;
+                        size[rootX] += size[rootY];
+                    } else {
+                        parent[rootX] = rootY;
+                        size[rootY] += size[rootX];
+                    }
+                    components--;
+                }
+                if (components==1){stb.append(0);
+                    for (int j = i+1; j < q; j++) {stb.append(1);}
+                    break;
+                }else{
+                    stb.append(0);}
+
+            }}else {
+                for (int j = 0; j < q; j++) {stb.append(1);}
+            }
+            writer.write(stb.reverse().toString());
+
+        } catch (IOException e) {
+            System.out.println(".");
+        }
+    }
+
+    private static int find(int[] parent, int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent, parent[x]);
+        }
+        return parent[x];
+    }
+}
