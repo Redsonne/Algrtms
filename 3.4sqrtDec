@@ -1,0 +1,63 @@
+import java.util.Scanner;
+
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = scanner.nextInt();
+        int k = (int) Math.sqrt(n);
+        long[] values = new long[n];
+        long[] sqrtdec = new long[(n + k - 1) / k];
+
+        for (int i = 0; i < n; i++) {
+            values[i] = scanner.nextLong();
+            sqrtdec[i / k] += values[i];
+        }
+
+        int m = scanner.nextInt();
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < m; i++) {
+            String direction = scanner.next();
+            int indx = scanner.nextInt();
+           int toAdd = scanner.nextInt();
+
+            if (direction.equals("FindSum")) {
+                output.append(Find(values, sqrtdec, k, indx, toAdd)).append("\n");
+            } else {
+                values[indx] += toAdd;
+                sqrtdec[indx / k] += toAdd;
+            }
+        }
+        System.out.print(output);
+        scanner.close();
+
+    }
+    private static long Find(long[] a,long[] b,int k,int l,int r){
+int jl=l/k;
+long sum=0;
+        int jr=r/k;
+        if (jl == jr) {
+            for (int i = l; i < r; i++) {
+                sum += a[i];
+            }
+            return sum;
+        } else {
+
+
+            for (int i = l; i < (jl + 1) * k; i++) {
+                sum += a[i];
+            }
+
+            for (int i = jl + 1; i < jr; i++) {
+                sum += b[i];
+            }
+
+            for (int i = jr * k; i < r; i++) {
+                sum += a[i];
+            }
+            return sum;
+        }
+
+    }
+}
