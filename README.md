@@ -87,6 +87,12 @@
 ![image](https://github.com/user-attachments/assets/782dc91c-4eca-48b9-ad62-546f4e440519)
 
 
+5.1 Циклический сдвиг
+![image](https://github.com/user-attachments/assets/1a84a75f-c4f1-4b28-aa7f-0758968cc53e)
+
+5.2 Лексикографически минимальный циклический сдвиг
+![image](https://github.com/user-attachments/assets/28555e52-d648-44e7-ab05-a8eb4ea7d11f)
+
 
 
 
