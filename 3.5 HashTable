@@ -1,0 +1,50 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(new File("input.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            int m = sc.nextInt();
+            int c = sc.nextInt();
+            int n = sc.nextInt();
+            int[] table=new int[m];
+            Arrays.fill(table,-1);
+            int[] b=new int[n];
+
+            for (int i=0;i<n;i++){
+b[i]=sc.nextInt();
+            }
+int curr=0;
+ int hashed=0;
+for (int i=0;i<n;i++){
+  curr=  b[i];
+  for(int j=0;j<m;j++){
+  hashed=hashf(curr,j,c,m);
+  if(table[hashed]!=b[i]){
+  if ( table[hashed]==-1){
+      table[hashed]=b[i];
+      break;
+  }}else{ break;}
+  }
+}
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < m; i++) {
+                sb.append(table[i]);
+                if (i < m - 1) {
+                    sb.append(" "); // Добавляем пробел между элементами
+                }
+            }
+writer.write(sb.toString());
+             } catch (IOException e) {
+            e.getMessage();
+        }
+    }
+
+public static int hashf(int x,int i,int c,int m ){
+return((x%m+c*i)%m);
+}
+
+}
