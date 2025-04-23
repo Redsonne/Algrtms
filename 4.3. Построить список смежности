@@ -1,0 +1,44 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try (Scanner scanner = new Scanner(new File("input.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            int n = scanner.nextInt();
+            int m = scanner.nextInt();
+            ArrayList<Integer>[] list = new ArrayList[n];
+            for (int i = 0; i < n; i++) {
+                list[i] = new ArrayList<Integer>();
+            }
+            int x;
+            int y;
+            for(int i=0;i<m;i++){
+                x=scanner.nextInt();
+                y=scanner.nextInt();
+                list[x-1].add(y);
+                list[y-1].add(x);
+
+            }
+            StringBuilder sb=new StringBuilder();
+            int s;
+            for(int i=0;i<n;i++){
+                s=list[i].size();
+                sb.append(s+" ");
+                for (int j=s-1;j>=0;j--){
+                    sb.append(list[i].get(j)+" ");
+                }
+sb.append("\n");
+
+            }
+            writer.write(sb.toString());
+
+        }catch (IOException e) {
+            e.getMessage();
+        }
+    }
+
+}
