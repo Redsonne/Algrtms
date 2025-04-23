@@ -1,0 +1,100 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+public static PriorityQueue<Node> q;
+public static boolean[] processed;
+public static long[] dist;
+    public static   ArrayList< Edge>[] list;
+    public static void main(String[] args) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+
+            StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
+            int n = Integer.parseInt(tokenizer.nextToken());
+            int m = Integer.parseInt(tokenizer.nextToken());
+             list = new ArrayList[n];
+            for (int i = 0; i < n; i++) {
+                list[i] = new ArrayList<>();
+            }
+            int x;
+            int y;
+            long z;
+            for(int i=0;i<m;i++){
+                tokenizer = new StringTokenizer(reader.readLine());
+                 x = Integer.parseInt(tokenizer.nextToken()) - 1;
+                 y = Integer.parseInt(tokenizer.nextToken()) - 1;
+                 z = Integer.parseInt(tokenizer.nextToken());
+                list[x].add(new Edge(y, z));
+                list[y].add(new Edge(x, z));
+            }
+processed=new boolean[n];
+            dist=new long[n];
+            Arrays.fill(processed,false);
+            Arrays.fill(dist,Long.MAX_VALUE);
+            dist[0]=0;
+
+long res=dijkstra(0);
+
+
+
+            writer.write(String.valueOf(res));
+
+        }catch (IOException e) {
+            e.getMessage();
+        }
+    }
+
+    public static long dijkstra(int start){
+        q = new PriorityQueue<>(Comparator.comparingLong(a -> a.distance));
+        q.add(new Node(start, 0));
+
+        while (!q.isEmpty()) {
+            Node curr = q.poll();
+            int v = curr.vertex;
+            long dv = curr.distance;
+
+            if (processed[v]) {
+                continue;
+            }
+
+           
+            processed[v] = true;
+            dist[v] = dv;
+
+            for (Edge edge : list[v]) {
+                int u = edge.to;
+                long cu = edge.cost;
+
+                if (!processed[u] && dv + cu < dist[u]) {
+                    dist[u] = dv + cu;
+                    q.add(new Node(u, dist[u]));
+                }
+            }
+            if(processed[dist.length - 1]){break;}
+        }
+
+        return dist[dist.length - 1];
+    }
+
+    static class Node {
+        int vertex;
+        long distance;
+
+        Node(int vertex, long distance) {
+            this.vertex = vertex;
+            this.distance = distance;
+        }
+    }
+
+    static class Edge {
+        int to;
+       long cost;
+
+        Edge(int to, long cost) {
+            this.to = to;
+            this.cost = cost;
+        }
+    }
+
+}
