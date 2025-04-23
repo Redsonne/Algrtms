@@ -1,0 +1,35 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try (Scanner scanner = new Scanner(new File("input.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            int n = scanner.nextInt();
+            int[] list= new int[n];
+
+
+int x=0;
+int y=0;
+for(int i=0;i<n-1;i++){
+    x=scanner.nextInt();
+    y=scanner.nextInt();
+    list[y-1]=x;
+
+
+}
+StringBuilder sb=new StringBuilder();
+            for(int i=0;i<n;i++){
+
+                sb.append(list[i]+" ");
+            }
+sb.deleteCharAt(sb.length()-1);
+               writer.write(sb.toString());
+
+        }catch (IOException e) {
+            e.getMessage();
+        }
+    }
+
+}
