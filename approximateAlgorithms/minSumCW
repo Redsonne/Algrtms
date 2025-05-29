@@ -1,0 +1,86 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+   public static class Worker implements Comparable<Worker> {
+        int index;
+        int speed;
+        double currentTime;
+
+        Worker(int index, int speed) {
+            this.index = index;
+            this.speed = speed;
+            this.currentTime = 0.0;
+        }
+
+       public int compareTo(Worker other) {
+           double thisEffectiveTime = this.currentTime + (1.0 / this.speed);
+           double otherEffectiveTime = other.currentTime + (1.0 / other.speed);
+           return Double.compare(thisEffectiveTime, otherEffectiveTime);
+       }
+    }
+    public static void main(String[] args) {
+        try (Scanner scanner = new Scanner(new File("input.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            int n = scanner.nextInt();
+            int[] vremuaTask = new int[n];
+
+            int[] zavisimosti = new int[n];
+            List<int[]> tasks = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                vremuaTask[i] = scanner.nextInt();
+                tasks.add(new int[]{vremuaTask[i], i});
+            }
+            tasks.sort((a, b) -> Integer.compare(b[0], a[0]));
+            int  m = scanner.nextInt();
+            double[] finishT = new double[m];
+            List<Worker> l = new ArrayList<>();
+            int[] workersP = new int[m];
+            for (int i = 0; i < m; i++) {
+                workersP[i] = scanner.nextInt();
+                l.add(new Worker(i, workersP[i]));
+            }
+            for (int[] task : tasks) {
+                int taskTime = task[0];
+                int taskIndex = task[1];
+                Worker best = null;
+                double bestFinish = Double.MAX_VALUE;
+
+                for (Worker w : l) {
+                    double timeNeed = (double) taskTime / w.speed;
+                    double finish = w.currentTime + timeNeed;
+                    if (finish < bestFinish) {
+                        bestFinish = finish;
+                        best = w;
+                    }
+                }
+
+                best.currentTime += (double) taskTime / best.speed;
+                finishT[best.index] = best.currentTime;
+                zavisimosti[taskIndex] = best.index + 1;
+            }
+            double maxTime = Arrays.stream(finishT).max().orElse(0.0);
+            String timeStr = String.format(Locale.US, "%.5f", maxTime);
+
+
+writer.write(timeStr);
+            writer.newLine();
+            for (int i = 0; i < n; i++) {
+                writer.write(String.valueOf(zavisimosti[i]));
+                if (i < n - 1) {
+                    writer.write(" ");
+                } else {
+                    writer.newLine();
+                }
+            }
+
+
+        } catch (IOException e) {
+            e.getMessage();
+        }
+    }
+
+
+
+
+  }
