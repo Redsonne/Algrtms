@@ -57,6 +57,10 @@
 3.6 Черный ящик
 ![image](https://github.com/user-attachments/assets/4bea891d-e97c-434a-8256-1b0cc457a2f8)
 
+3.7 Биномиальная куча
+![image](https://github.com/user-attachments/assets/996914b4-db18-46d8-a52e-d4fee151c57d)
+
+
 
 4.1 Построить матрицу смежности
 ![image](https://github.com/user-attachments/assets/63cb103e-4c7b-47ee-88ea-7fa1d54c404c)
