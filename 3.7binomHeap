@@ -1,0 +1,40 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(new File("input.txt"));
+             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            long n = sc.nextLong();
+            long max=0;
+            ArrayList<Long> a=new ArrayList<>();
+
+
+while(n>0){
+    max = Long.highestOneBit(n);
+    a.add((long) (Math.log(max) / Math.log(2))); 
+    n -= max;
+
+
+}
+       Collections.sort(a);
+for (long x:a){
+    writer.write(String.valueOf(x));
+    writer.newLine();
+
+}
+      //  writer.write(String.valueOf(res));
+
+        }catch (IOException e) {
+            e.getMessage();
+        }
+
+
+
+    }
+
+
+  }
